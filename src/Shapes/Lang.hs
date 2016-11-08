@@ -43,7 +43,7 @@ point = vector
 data Shape = Empty
            | Circle
            | Square
-             deriving Show
+             deriving (Show, Read)
 
 empty, circle, square :: Shape
 

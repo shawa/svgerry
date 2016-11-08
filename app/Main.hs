@@ -14,6 +14,15 @@ import Text.Blaze.Html.Renderer.Text
 
 
 import Shapes.Lang
+import Shapes.Render
+
+
+exampleShape :: Shape
+exampleShape = read "square"
+
+exampleDrawing :: Drawing
+
+exampleDrawing = [(identity, exampleShape)]
 
 main = scotty 3000 $ do
     get "/" $ do
