@@ -11,7 +11,7 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
 import Text.Blaze.Html.Renderer.Text
-
+import Text.Blaze.Svg.Renderer.Utf8
 
 import Shapes.Lang
 import Shapes.Render
@@ -26,5 +26,5 @@ exampleDrawing = [(identity, exampleShape)]
 
 main = scotty 3000 $ do
     get "/" $ do
-      S.html . renderHtml $ do
-        h1 "Heading right here"
+      S.setHeader "Content-Type" "image/svg+xml"
+      S.raw $ renderSvg $ toSvg exampleDrawing

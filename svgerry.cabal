@@ -28,6 +28,7 @@ executable svgerry-exe
                      , svgerry
                      , scotty
                      , blaze-html
+                     , blaze-svg
   default-language:    Haskell2010
 
 test-suite svgerry-test
