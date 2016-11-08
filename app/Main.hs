@@ -1,20 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Main where
-import qualified Web.Scotty as S
 
+module Main where
+import Web.Scotty
 import Text.Blaze.Html5 hiding (main)
 import Text.Blaze.Html5.Attributes
+
+
+import qualified Web.Scotty as S
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
+
 import Text.Blaze.Html.Renderer.Text
 
-
-response name = do renderHtml $ do
-                     h1 ("Hello " >> toHtml name)
-
-
-main = S.scotty 3000 $ do
-  S.get "/" $ do
-    S.html "Hello World!"
-
-  S.get "/greet/:name" $ do
-    name <- S.param "name"
-    S.html $ response name
+main = scotty 3000 $ do
+    get "/" $ do
+      S.html . renderHtml $ do
+        h1 "Heading right here"
