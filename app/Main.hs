@@ -13,7 +13,8 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Html.Renderer.Text
 
 
-import Shapes
+import Shapes.Lang
+
 main = scotty 3000 $ do
     get "/" $ do
       S.html . renderHtml $ do
