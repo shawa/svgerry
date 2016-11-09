@@ -9,7 +9,7 @@ module Shapes.Lang(
 -- Utilities
 
 data Vector = Vector Double Double
-              deriving Show
+              deriving (Show, Read)
 vector = Vector
 
 cross :: Vector -> Vector -> Double
@@ -24,7 +24,7 @@ invert (Matrix (Vector a b) (Vector c d)) = matrix (d / k) (-b / k) (-c / k) (a 
 
 -- 2x2 square matrices are all we need.
 data Matrix = Matrix Vector Vector
-              deriving Show
+              deriving (Show, Read)
 
 matrix :: Double -> Double -> Double -> Double -> Matrix
 matrix a b c d = Matrix (Vector a b) (Vector c d)
@@ -58,7 +58,7 @@ data Transform = Identity
            | Scale Vector
            | Compose Transform Transform
            | Rotate Matrix
-             deriving Show
+             deriving (Show, Read)
 
 identity = Identity
 translate = Translate
