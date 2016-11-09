@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+              crossorigin="anonymous">
+
+
+        <link href="https://fonts.googleapis.com/css?family=Pacifico|Lato" rel="stylesheet">
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+                crossorigin="anonymous"></script>
+
+        <style>
+         body {
+             font-family: Lato;
+         }
+         #logo {
+             font-family: Pacifico;
+             font-size: 40pt;
+             text-align: center;
+         }
+
+         #tagline {
+             font-size: 1em;
+             text-align: center
+         }
+         #email, #shapetext {
+             font-family: Menlo
+         }
+
+         #shapetext {
+             margin-top: 1em;
+             margin-bottom: 1em;
+             background-color: #222222;
+             color: #eeeeee
+         }
+        </style>
+    </head>
+    <body>
+            </div>
+
+            <div class="container">
+                <h1 id="logo">SVGerry</h1>
+                <h2 id="tagline">Andrew Shaw <span id="email">&lt;shawa1@tcd.ie&gt;</span> 13323657</h2>
+                <svg width="100%" height="50%" xmlns="http://www.w3.org/2000/svg">
+                </svg>
+
+            <form>
+                <div class="form-group"></div>
+                <textarea class="form-control" id="shapeText" rows="3" default="text">[(scale (point 10 10), circle)]</textarea>
+
+                <button type="button" "onclick="postShapeText()" id="shapeRenderButton" class="btn">Render!</button>
+            </form>
+        </div>
+
+
+    <script type="text/javascript">
+    $('#shapeRenderButton').on('click', event => {
+         const shapeText = $('#shapeText').val().replace('\n', ' ');
+
+         $.ajax({
+             url  : 'http://localhost:3000/svg',
+             type : 'get',
+             data : `shapeText=${shapeText}`,
+         }).done(function(data, statusText, xhr){
+             console.log(data);
+         });
+    });
+    </script>
+
+    </body>
+
+
+</html>
