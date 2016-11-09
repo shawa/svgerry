@@ -39,6 +39,10 @@
              background-color: #222222;
              color: #eeeeee
          }
+
+         #shapeSVGDrawing {
+             border: 1px solid #eeeeee;
+         }
         </style>
     </head>
     <body>
@@ -46,15 +50,15 @@
 
             <div class="container">
                 <h1 id="logo">SVGerry</h1>
-                <h2 id="tagline">Andrew Shaw <span id="email">&lt;shawa1@tcd.ie&gt;</span> 13323657</h2>
-                <svg id="shapeSVGDrawing" width="100%" height="50%" xmlns="http://www.w3.org/2000/svg">
-                </svg>
+                <h2 id="tagline">Andrew Shaw <span id="email">&lt;shawa1@tcd.ie&gt;</span></h2>
+                <iframe id="shapeSVGDrawing" width="100%" height="50%">
+                </iframe>
 
             <form>
                 <div class="form-group"></div>
                 <textarea class="form-control" id="shapeText" rows="3" default="text">[(scale (point 10 10), circle)]</textarea>
 
-                <button type="button" "onclick="postShapeText()" id="shapeRenderButton" class="btn">Render!</button>
+                <button type="button" "onclick="postShapeText()" id="shapeRenderButton" class="btn">render</button>
             </form>
         </div>
 
@@ -62,15 +66,9 @@
     <script type="text/javascript">
     $('#shapeRenderButton').on('click', event => {
          const shapeText = $('#shapeText').val().replace('\n', ' ');
-
-         $.ajax({
-             url  : 'http://localhost:3000/svg',
-             type : 'get',
-             data : `shapeText=${shapeText}`,
-         }).done(function(data, statusText, xhr){
-             console.log(data.innerText);
-             $("#shapeSVGDrawing").append(data);
-         });
+         url =  `http://localhost:3000/svg?shapeText=${shapeText}`;
+         console.log(url);
+         $("#shapeSVGDrawing").attr('src', url);
     });
     </script>
 
