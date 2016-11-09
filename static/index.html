@@ -47,7 +47,7 @@
             <div class="container">
                 <h1 id="logo">SVGerry</h1>
                 <h2 id="tagline">Andrew Shaw <span id="email">&lt;shawa1@tcd.ie&gt;</span> 13323657</h2>
-                <svg width="100%" height="50%" xmlns="http://www.w3.org/2000/svg">
+                <svg id="shapeSVGDrawing" width="100%" height="50%" xmlns="http://www.w3.org/2000/svg">
                 </svg>
 
             <form>
@@ -68,7 +68,8 @@
              type : 'get',
              data : `shapeText=${shapeText}`,
          }).done(function(data, statusText, xhr){
-             console.log(data);
+             console.log(data.innerText);
+             $("#shapeSVGDrawing").append(data);
          });
     });
     </script>
