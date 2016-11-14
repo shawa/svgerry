@@ -1,4 +1,7 @@
+module Shapes.Lang where
 import Data.Matrix
+import Data.Aeson
+import Control.Monad.Fail
 
 type Point = Matrix Double
 
@@ -16,14 +19,12 @@ square = Square
 circle = Circle
 
 
-data Transform = Identity (Matrix Double) 
+data Transform = Identity (Matrix Double)
                | Scale (Matrix Double)
                | Rotate (Matrix Double)
                | Translate (Matrix Double)
-               | Compose Transform Transform
+               | Transform (Matrix Double)
                  deriving Show
-
-
 
 -- It's a Transpose!
 --
@@ -49,14 +50,20 @@ rotate :: Double -> Transform
 rotate    angle = Rotate    $ fromLists [ [ (cos a),  (-sin a),  0 ]
                                         , [ (sin a),  (cos a) ,  0 ]
                                         , [ 0      ,  0       ,  1 ] ]
-                                     where a = angle
+                                     where a          = degree2rad angle
+                                           degree2rad = (* (pi/180))
 
-transformMatrix :: Transform -> Matrix Double
-transformMatrix (Identity  m) = m
-transformMatrix (Scale     m) = m
-transformMatrix (Rotate    m) = m
-transformMatrix (Translate m) = m
-transformMatrix (Compose t u) = (transformMatrix t) `multStd` (transformMatrix u)
+compose :: Transform -> Transform -> Transform
+compose t u = Transform $ (getMatrix t) `multStd` (getMatrix u)
+
+getMatrix :: Transform -> Matrix Double
+getMatrix (Identity  m) = m
+getMatrix (Scale     m) = m
+getMatrix (Rotate    m) = m
+getMatrix (Translate m) = m
+getMatrix (Transform m) = m
 
 transform :: Transform -> Point -> Point
-transform t p  = (transformMatrix t) `multStd` p
+transform t p  = (getMatrix t) `multStd` p
+
+data Figure = Figure (Transform, Shape)
