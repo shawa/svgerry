@@ -1,100 +1,62 @@
-module Shapes.Lang(
-  Shape, Point, Vector, Transform, Drawing,
-  point, getX, getY,
-  empty, circle, square,
-  identity, translate, rotate, scale, (<+>),
-  inside)  where
+import Data.Matrix
 
-
--- Utilities
-
-data Vector = Vector Double Double
-              deriving (Show, Read)
-vector = Vector
-
-cross :: Vector -> Vector -> Double
-cross (Vector a b) (Vector a' b') = a * a' + b * b'
-
-mult :: Matrix -> Vector -> Vector
-mult (Matrix r0 r1) v = Vector (cross r0 v) (cross r1 v)
-
-invert :: Matrix -> Matrix
-invert (Matrix (Vector a b) (Vector c d)) = matrix (d / k) (-b / k) (-c / k) (a / k)
-  where k = a * d - b * c
-
--- 2x2 square matrices are all we need.
-data Matrix = Matrix Vector Vector
-              deriving (Show, Read)
-
-matrix :: Double -> Double -> Double -> Double -> Matrix
-matrix a b c d = Matrix (Vector a b) (Vector c d)
-
-getX (Vector x y) = x
-getY (Vector x y) = y
-
--- Shapes
-
-type Point  = Vector
+type Point = Matrix Double
 
 point :: Double -> Double -> Point
-point = vector
-
+point x y = fromList 1 3 [x, y, 1]
 
 data Shape = Empty
            | Circle
            | Square
              deriving (Show, Read)
 
-empty, circle, square :: Shape
-
-empty = Empty
-circle = Circle
+empty, square, circle :: Shape
+empty  = Empty
 square = Square
+circle = Circle
 
--- Transformations
 
-data Transform = Identity
-           | Translate Vector
-           | Scale Vector
-           | Compose Transform Transform
-           | Rotate Matrix
-             deriving (Show, Read)
+data Transform = Identity (Matrix Double) 
+               | Scale (Matrix Double)
+               | Rotate (Matrix Double)
+               | Translate (Matrix Double)
+               | Compose Transform Transform
+                 deriving Show
 
-identity = Identity
-translate = Translate
-scale = Scale
-rotate angle = Rotate $ matrix (cos angle) (-sin angle) (sin angle) (cos angle)
-t0 <+> t1 = Compose t0 t1
+
+
+-- It's a Transpose!
+--
+--        |a b c|
+-- matrix |d e f| = Matrix ...
+--        |g h i|
+identity :: Transform
+identity = Identity $ fromLists [ [ 1, 0, 0 ]
+                                , [ 0, 1, 0 ]
+                                , [ 0, 0, 1 ] ]
+
+scale :: Double -> Double -> Transform
+scale cy cx = Scale $ fromLists [ [ cx, 0,  0 ]
+                                , [ 0,  cy, 0 ]
+                                , [ 0,  0,  1 ] ]
+
+translate :: Double -> Double -> Transform
+translate dy dx = Translate $ fromLists [ [1, 0, dx ]
+                                        , [0, 1, dy ]
+                                        , [0, 0, 1  ] ]
+
+rotate :: Double -> Transform
+rotate    angle = Rotate    $ fromLists [ [ (cos a),  (-sin a),  0 ]
+                                        , [ (sin a),  (cos a) ,  0 ]
+                                        , [ 0      ,  0       ,  1 ] ]
+                                     where a = angle
+
+transformMatrix :: Transform -> Matrix Double
+transformMatrix (Identity  m) = m
+transformMatrix (Scale     m) = m
+transformMatrix (Rotate    m) = m
+transformMatrix (Translate m) = m
+transformMatrix (Compose t u) = (transformMatrix t) `multStd` (transformMatrix u)
 
 transform :: Transform -> Point -> Point
-transform Identity                   x = id x
-transform (Translate (Vector tx ty)) (Vector px py)  = Vector (px - tx) (py - ty)
-transform (Scale (Vector tx ty))     (Vector px py)  = Vector (px / tx)  (py / ty)
-transform (Rotate m)                 p = (invert m) `mult` p
-transform (Compose t1 t2)            p = transform t2 $ transform t1 p
-
--- Drawings
-
-type Drawing = [(Transform,Shape)]
-
--- interpretation function for drawings
-
-inside :: Point -> Drawing -> Bool
-inside p d = or $ map (inside1 p) d
-
-inside1 :: Point -> (Transform, Shape) -> Bool
-inside1 p (t,s) = insides (transform t p) s
-
-insides :: Point -> Shape -> Bool
-p `insides` Empty = False
-p `insides` Circle = distance p <= 1
-p `insides` Square = maxnorm  p <= 1
-
-
-distance :: Point -> Double
-distance (Vector x y ) = sqrt ( x**2 + y**2 )
-
-maxnorm :: Point -> Double
-maxnorm (Vector x y ) = max (abs x) (abs y)
-
-testShape = (scale (point 10 10), circle)
+transform t p  = (transformMatrix t) `multStd` p
