@@ -10,13 +10,16 @@ import qualified Text.Blaze.Svg11.Attributes as A
 
 svgHeader = S.docTypeSvg ! A.version "1.1" ! A.width "150" ! A.height "100" ! A.viewbox "0 0 3 2"
 
-svgBoilerPlate shapeSvg = svgHeader $ do
-  S.g shapeSvg
 
 toSvg :: Drawing -> S.Svg
-toSvg [(_, square)] = svgBoilerPlate $ do
-    S.rect ! A.width "1" ! A.height "1" ! A.fill "#03"
+toSvg triples = svgHeader $ do
+  mconcat $ map toSvgElem triples
+
+toSvgElem (t, s) = do
+  S.g $ do
+    (getSvgElem s) ! (makeAttrs t)
 
 
-toSvg _ = svgBoilerPlate $ do
-  S.rect ! A.width "1" ! A.height "10" ! A.fill "#ff00ff"
+getSvgElem s = case s of circle -> S.circle
+                         square -> S.rect
+                         _      -> S.circle
