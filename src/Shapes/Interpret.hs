@@ -22,9 +22,9 @@ getMatrix t = M.fromLists $ case t of Identity      -> [[1, 0, 0] ,[0, 1, 0] ,[0
                                              deg2rad = (* (pi/180))
 
 toSvgElem :: Shape -> S.Svg
-toSvgElem Empty  = S.circle ! radius "0"
-toSvgElem Circle = S.circle ! radius "1"
-toSvgElem Square = S.rect   ! width  "1" ! height "1"
+toSvgElem Empty  = S.circle ! r "0"
+toSvgElem Circle = S.circle ! r "1"
+toSvgElem Square = S.rect   ! width  "10" ! height "10"
 
 
 
