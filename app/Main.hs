@@ -22,15 +22,11 @@ import Shapes.Lang
 import Shapes.Interpret
 
 
-shapeFromText :: String -> Shape
-shapeFromText string = case readMaybe string of Just shape -> shape
-                                                Nothing    -> square
-
 main = scotty 3000 $ do
     get "/" $ do file "./static/index.html"
 
     get "/svg" $ do
       shapeText <- (S.param "shapeText") `rescue` return
       S.setHeader "Content-Type" "image/svg+xml"
-      let shape = shapeFromText $ (T.unpack . TL.toStrict) shapeText
-      S.text "Hello"
+      let shapeDrawing = (read $ T.unpack $  TL.toStrict shapeText) :: [Figure]
+      S.text $ renderSvg $ toSvgDoc $ shapeDrawing

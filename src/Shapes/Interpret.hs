@@ -26,16 +26,24 @@ toSvgElem Empty  = S.circle ! radius "0"
 toSvgElem Circle = S.circle ! radius "1"
 toSvgElem Square = S.rect   ! width  "1" ! height "1"
 
+
+
+-- https://developer.mozilla.org/en/docs/Web/SVG/Attribute/transform
+-- We've had 3x3 matrices so far, in order to compose transformations easily
+-- SVG's matrix constructor only takes 6 arguments, as the last row is always [0 0 1]
+-- which looks like:
+--
+--       a c e
+--       b d f = getMatrix t
+--       0 0 1
 toAttrs t = transform $ S.matrix a b c d e f
                           where  a = M.getElem 1 1 transMat
                                  b = M.getElem 2 1 transMat
                                  c = M.getElem 1 2 transMat
                                  d = M.getElem 2 2 transMat
-                                 e = M.getElem 1 2 transMat
+                                 e = M.getElem 1 3 transMat
                                  f = M.getElem 2 3 transMat
                                  transMat = getMatrix t
-
-
 toSvg :: Figure -> S.Svg
 toSvg (t, s) = do
   toSvgElem s ! toAttrs t
@@ -51,4 +59,4 @@ toSvgDoc figs = svgHead $ do
           toSvgs figs
 
 svgHead = do
-  S.docTypeSvg ! version "1.1" ! width "150" ! height "100" ! viewbox "0 0 3 2"
+  S.docTypeSvg ! version "1.1" ! width "500" ! height "500" ! viewbox "0 0 3 2"
