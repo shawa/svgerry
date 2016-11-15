@@ -9,7 +9,13 @@ data Transform = Identity
                | Scale Double Double
                | Rotate Double
                | Translate Double Double
-               | Compose Transform Transform
                  deriving (Show, Read)
 
-type Figure = (Transform, Shape)
+type Colour = String
+
+data Style = StrokeWidth Double
+           | StokeColour Colour
+           | FillColour Colour
+             deriving (Show, Read)
+
+type Figure = ([Transform], Shape)

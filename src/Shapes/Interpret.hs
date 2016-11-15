@@ -12,14 +12,15 @@ import Shapes.Lang
 
 type Point = M.Matrix Double
 
-getMatrix :: Transform -> M.Matrix Double
-getMatrix (Compose t u) = (getMatrix t) `M.multStd` (getMatrix u)
-getMatrix t = M.fromLists $ case t of Identity      -> [[1, 0, 0] ,[0, 1, 0] ,[0, 0, 1]]
-                                      Scale y x     -> [[x, 0, 0] ,[0, y, 0] ,[0, 0, 1]]
-                                      Translate y x -> [[1, 0, x] ,[0, 1, y] ,[0, 0, 1]]
-                                      Rotate a'     -> [[(cos a), (-sin a), 0] ,[(sin a), (cos a) , 0] ,[0, 0, 1]]
-                                       where a       = deg2rad a'
-                                             deg2rad = (* (pi/180))
+getMatrix :: [Transform] -> M.Matrix Double
+getMatrix [] = M.identity 3
+getMatrix [t] = M.fromLists $ case t of Identity      -> [[1, 0, 0] ,[0, 1, 0] ,[0, 0, 1]]
+                                        Scale y x     -> [[x, 0, 0] ,[0, y, 0] ,[0, 0, 1]]
+                                        Translate y x -> [[1, 0, x] ,[0, 1, y] ,[0, 0, 1]]
+                                        Rotate a'     -> [[(cos a), (-sin a), 0] ,[(sin a), (cos a) , 0] ,[0, 0, 1]]
+                                         where a       = deg2rad a'
+                                               deg2rad = (* (pi/180))
+getMatrix (t:ts) = (getMatrix [t]) `M.multStd` (getMatrix ts)
 
 toSvgElem :: Shape -> S.Svg
 toSvgElem Empty  = S.circle ! r "0"
@@ -44,6 +45,7 @@ toAttrs t = transform $ S.matrix a b c d e f
                                  e = M.getElem 1 3 transMat
                                  f = M.getElem 2 3 transMat
                                  transMat = getMatrix t
+
 toSvg :: Figure -> S.Svg
 toSvg (t, s) = do
   toSvgElem s ! toAttrs t
@@ -59,4 +61,4 @@ toSvgDoc figs = svgHead $ do
           toSvgs figs
 
 svgHead = do
-  S.docTypeSvg ! version "1.1" ! width "500" ! height "500" ! viewbox "0 0 3 2"
+  S.docTypeSvg ! version "1.1" ! width "1200" ! height "550" ! viewbox "0 0 3 2"
