@@ -1,35 +1,42 @@
 {-# LANGUAGE OverloadedStrings#-}
 module Shapes.Interpret where
-import Data.Matrix
+
+import qualified Data.Matrix as M
+
+import Text.Blaze.Svg11 ((!), Svg)
+import qualified Text.Blaze.Svg11 as S
+import Text.Blaze.Svg11.Attributes
 
 import Shapes.Lang
 
-type Point = Matrix Double
+type Point = M.Matrix Double
 
--- It's a Transpose!
---
---        |a b c|
--- matrix |d e f| = Matrix ...
---        |g h i|
-getMatrix :: Transform -> Matrix Double
+getMatrix :: Transform -> M.Matrix Double
+getMatrix (Compose t u) = (getMatrix t) `M.multStd` (getMatrix u)
+getMatrix t = M.fromLists $ case t of Identity      -> [[1, 0, 0] ,[0, 1, 0] ,[0, 0, 1]]
+                                      Scale y x     -> [[x, 0, 0] ,[0, y, 0] ,[0, 0, 1]]
+                                      Translate y x -> [[1, 0, x] ,[0, 1, y] ,[0, 0, 1]]
+                                      Rotate a'     -> [[(cos a), (-sin a), 0] ,[(sin a), (cos a) , 0] ,[0, 0, 1]]
+                                       where a       = deg2rad a'
+                                             deg2rad = (* (pi/180))
 
-getMatrix (Identity) = fromLists [ [ 1, 0, 0 ]
-                               , [ 0, 1, 0 ]
-                               , [ 0, 0, 1 ] ]
+toSvg :: Shape -> S.Svg
+toSvg Circle = S.circle ! radius "1"
+toSvg Square = S.rect  ! width "1" ! height "1"
+toSvg Empty  = S.circle !radius "0"
 
-getMatrix (Scale cy cx) = fromLists [ [ cx, 0,  0 ]
-                                  , [ 0,  cy, 0 ]
-                                  , [ 0,  0,  1 ] ]
+toAttr t = transform $ S.matrix a b c d e f
+                         where  a = M.getElem 1 1 transMat
+                                b = M.getElem 2 1 transMat
+                                c = M.getElem 1 2 transMat
+                                d = M.getElem 2 2 transMat
+                                e = M.getElem 1 2 transMat
+                                f = M.getElem 2 3 transMat
+                                transMat = getMatrix t
 
-getMatrix (Translate dy dx) = fromLists [ [1, 0, dx ]
-                            , [0, 1, dy ]
-                            , [0, 0, 1  ] ]
+svgHead = do
+  S.docTypeSvg ! version "1.1" ! width "150" ! height "100" ! viewbox "0 0 3 2" 
 
-
-getMatrix (Rotate angle) = fromLists [ [ (cos a),  (-sin a),  0 ]
-                                        , [ (sin a),  (cos a) ,  0 ]
-                                        , [ 0      ,  0       ,  1 ] ]
-                                     where a          = degree2rad angle
-                                           degree2rad = (* (pi/180))
-
-getMatrix (Compose t u) = (getMatrix t) `multStd` (getMatrix u)
+toSvgDoc :: Transform -> Shape -> S.Svg
+toSvgDoc t s = svgHead $ do
+  toSvg s ! toAttr t

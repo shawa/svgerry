@@ -19,7 +19,7 @@ import qualified Data.Text.Lazy as TL
 import qualified Data.Text as T
 
 import Shapes.Lang
-import Shapes.Render
+import Shapes.Interpret
 
 
 shapeFromText :: String -> Shape
@@ -33,4 +33,4 @@ main = scotty 3000 $ do
       shapeText <- (S.param "shapeText") `rescue` return
       S.setHeader "Content-Type" "image/svg+xml"
       let shape = shapeFromText $ (T.unpack . TL.toStrict) shapeText
-      S.text $ renderSvg $ toSvg [(identity, shape)]
+      S.text "Hello"
