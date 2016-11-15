@@ -67,3 +67,4 @@ transform :: Transform -> Point -> Point
 transform t p  = (getMatrix t) `multStd` p
 
 data Figure = Figure (Transform, Shape)
+type Drawing = [Figure]
