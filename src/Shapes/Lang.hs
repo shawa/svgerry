@@ -12,4 +12,4 @@ data Transform = Identity
                | Compose Transform Transform
                  deriving (Show, Read)
 
-type Drawing = [(Transform, Shape)]
+type Figure = (Transform, Shape)
