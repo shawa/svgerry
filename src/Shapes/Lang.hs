@@ -11,11 +11,20 @@ data Transform = Identity
                | Translate Double Double
                  deriving (Show, Read)
 
-type Colour = String
+data Colour = Red
+            | Green
+            | Blue
+            | Cyan
+            | Magenta
+            | Yellow
+            | Black
+            | White
+            | Gray
+              deriving (Show, Read)
 
 data Style = StrokeWidth Double
-           | StokeColour Colour
+           | StrokeColour Colour
            | FillColour Colour
              deriving (Show, Read)
 
-type Figure = ([Transform], Shape)
+type Figure = ([Style], [Transform], Shape)

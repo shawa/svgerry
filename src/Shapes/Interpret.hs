@@ -20,6 +20,7 @@ getMatrix [t] = M.fromLists $ case t of Identity      -> [[1, 0, 0] ,[0, 1, 0] ,
                                         Rotate a'     -> [[(cos a), (-sin a), 0] ,[(sin a), (cos a) , 0] ,[0, 0, 1]]
                                          where a       = deg2rad a'
                                                deg2rad = (* (pi/180))
+
 getMatrix (t:ts) = (getMatrix [t]) `M.multStd` (getMatrix ts)
 
 toSvgElem :: Shape -> S.Svg
@@ -28,14 +29,19 @@ toSvgElem Circle = S.circle ! r "1"
 toSvgElem Square = S.rect   ! width  "10" ! height "10"
 
 
+toAttr :: Style -> S.Attribute
+toAttr (StrokeWidth w) = strokeWidth "0.1"
+toAttr (StokeColour c) = stroke "red"
+toAttr (FillColour c)  = fill "green"
 
 -- https://developer.mozilla.org/en/docs/Web/SVG/Attribute/transform
 -- We've had 3x3 matrices so far; in order to compose transformations easily
 -- SVG's matrix constructor only takes 6 arguments, as the last row is always [0 0 1]
 toAttrs t = transform $ S.matrix a b c d e f where [ [a, c, e] ,[b, d, f] ,[0, 0, 1]] = M.toLists $ getMatrix t
 
+
 toSvg :: Figure -> S.Svg
-toSvg (t, s) = toSvgElem s ! toAttrs t
+toSvg (styles, transforms, shape) = foldl (!) (toSvgElem shape) $ [toAttrs transforms] ++ map toAttr styles
 
 toSvgs :: [Figure] -> S.Svg
 toSvgs []         = toSvgElem Empty
