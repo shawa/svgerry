@@ -32,6 +32,9 @@
              font-family: Menlo
          }
 
+         #keyHint{
+             color: #888;
+         }
          #shapetext {
              margin-top: 1em;
              margin-bottom: 1em;
@@ -58,6 +61,7 @@
                 <textarea class="form-control" id="shapeText" rows="3" default="text">[([FillColour Red, StrokeColour Blue, StrokeWidth 0.1], [Translate 0 0], Circle)] </textarea>
 
                 <button type="button" "onclick="postShapeText()" id="shapeRenderButton" class="btn">render</button>
+                <span id="keyHint">ctrl|⌘ - enter</span>
             </form>
         </div>
 
@@ -74,7 +78,6 @@
               requestRender();
           }
       });
-
       $('#shapeRenderButton').on('click', requestRender);
       $('document').ready(requestRender);
     </script>
