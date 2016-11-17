@@ -7,6 +7,7 @@ import Text.Blaze.Svg11
 import Text.Blaze.Svg11.Attributes hiding (multStd)
 
 import Shapes.Lang
+import Shapes.Colours
 
 matList :: Transform -> [[Double]]
 matList (Identity)      = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

@@ -15,7 +15,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Shapes.Lang, Shapes.Interpret
+  exposed-modules:     Shapes.Lang, Shapes.Interpret, Shapes.Colours
   build-depends:       base >= 4.7 && < 5
                      , blaze-svg
                      , matrix

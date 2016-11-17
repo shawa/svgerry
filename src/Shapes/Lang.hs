@@ -1,4 +1,5 @@
 module Shapes.Lang where
+import Shapes.Colours (Colour)
 
 data Shape = Empty
            | Circle
@@ -10,17 +11,6 @@ data Transform = Identity
                | Rotate Double
                | Translate Double Double
                  deriving (Show, Read)
-
-data Colour = Red
-            | Green
-            | Blue
-            | Cyan
-            | Magenta
-            | Yellow
-            | Black
-            | White
-            | Gray
-              deriving (Show, Read)
 
 data Style = StrokeWidth Double
            | StrokeColour Colour
