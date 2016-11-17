@@ -9,9 +9,9 @@ import Text.Blaze.Svg11.Attributes hiding (multStd)
 import Shapes.Lang
 
 matList :: Transform -> [[Double]]
-matList (Identity)      = [[1, 0, 0] ,[0, 1, 0] ,[0, 0, 1]]
-matList (Scale y x)     = [[x, 0, 0] ,[0, y, 0] ,[0, 0, 1]]
-matList (Translate y x) = [[1, 0, x] ,[0, 1, y] ,[0, 0, 1]]
+matList (Identity)      = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+matList (Scale y x)     = [[x, 0, 0], [0, y, 0], [0, 0, 1]]
+matList (Translate y x) = [[1, 0, x], [0, 1, y], [0, 0, 1]]
 matList (Rotate a')     = [[cos a, -sin a, 0], [sin a, cos a, 0], [0, 0, 1]]
                           where a       = deg2rad a'
                                 deg2rad = (* (pi/180))
