@@ -117,6 +117,7 @@ data Colour = Aliceblue
             | Plum
             | Powderblue
             | Purple
+            | Rebeccapurple
             | Red
             | Rosybrown
             | Royalblue
@@ -148,3 +149,5 @@ data Colour = Aliceblue
             | Hex String
             | RGBA String
             deriving (Show, Read)
+
+
