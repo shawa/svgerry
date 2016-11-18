@@ -146,7 +146,7 @@ data Colour = Aliceblue
             | Whitesmoke
             | Yellowgreen
             | Yellow
-            | Hex String
+            | Hex Int Int Int
             | RGBA String
             deriving (Show, Read)
 

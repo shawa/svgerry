@@ -5,6 +5,7 @@ import Data.Matrix (Matrix, multStd, fromLists, toLists, identity)
 
 import Text.Blaze.Svg11
 import Text.Blaze.Svg11.Attributes hiding (multStd)
+import Text.Printf (printf)
 
 import Shapes.Lang
 import Shapes.Colours
@@ -29,6 +30,8 @@ toSvgElem Square = rect   ! width  "1" ! height "1"
 
 toAttr :: Style -> Attribute
 toAttr (StrokeWidth  w) = strokeWidth $ stringAttrVal w
+toAttr (FillColour   (Hex r g b )) = fill $ stringAttrVal $ printf "#%2x%2x%2x" r g b
+toAttr (StrokeColour (Hex c)) = stroke      $ stringAttrVal c
 toAttr (StrokeColour c) = stroke      $ stringAttrVal c
 toAttr (FillColour   c) = fill        $ stringAttrVal c
 
