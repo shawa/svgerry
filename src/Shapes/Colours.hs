@@ -147,5 +147,5 @@ data Colour = Aliceblue
             | Yellowgreen
             | Yellow
             | Hex String
-            | RGBA Int Int Int Int
+            | RGBA Int Int Int Double
             deriving (Show, Read)

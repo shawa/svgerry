@@ -53,11 +53,14 @@ stringAttrVal = stringValue . show
 -- SVG's matrix constructor only takes 6 arguments, as the last row is always [0 0 1]
 toAttrs t = transform $ matrix a b c d e f
                         where [[a, c, e], [b, d, f], [0, 0, 1]] = toLists $ getMatrix t
-                                                      --nice sanity check
+                                                      -- nice sanity check
 
 
 toSvg :: Figure -> Svg
-toSvg (styles, transforms, shape) = foldl (!) (toSvgElem shape) $ [toAttrs transforms] ++ map toAttr styles
+toSvg (styles, transforms, shape) = foldl (!) (toSvgElem shape) $ [toAttrs transforms]
+                                                               ++ map toAttr styles
+                                                               ++ [customAttribute "vector-effct" "non-scaling-stroke"]
+                                                                   -- fixes warped strokes due to transforms
 
 toSvgDoc :: [Figure] -> Svg
 toSvgDoc figs = svgHead $ foldl (>>) (toSvgElem Empty) (map toSvg figs)
