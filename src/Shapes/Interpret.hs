@@ -30,10 +30,14 @@ toSvgElem Square = rect   ! width  "1" ! height "1"
 
 toAttr :: Style -> Attribute
 toAttr (StrokeWidth  w) = strokeWidth $ stringAttrVal w
-toAttr (FillColour   (Hex r g b )) = fill $ stringAttrVal $ printf "#%2x%2x%2x" r g b
-toAttr (StrokeColour (Hex c)) = stroke      $ stringAttrVal c
-toAttr (StrokeColour c) = stroke      $ stringAttrVal c
-toAttr (FillColour   c) = fill        $ stringAttrVal c
+
+toAttr (StrokeColour (RGBA r g b a)) = stroke $ stringValue$ printf "rgba(%d,%d,%d,%d)" r g b a
+toAttr (StrokeColour(Hex r g b)) = stroke $ stringValue $ printf "#%2x%2x%2x" r g b
+toAttr (StrokeColour c)              = stroke $ stringAttrVal c
+
+toAttr (FillColour (Hex r g b)) = fill $ stringValue $ printf "#%2x%2x%2x" r g b
+toAttr (FillColour(RGBA r g b a)) = fill$ stringValue$ printf "rgba(%d,%d,%d,%d)" r g b a
+toAttr (FillColour c)            = fill $ stringAttrVal c
 
 stringAttrVal :: Show a => a -> AttributeValue
 stringAttrVal = stringValue . show
