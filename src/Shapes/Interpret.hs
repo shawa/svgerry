@@ -24,7 +24,7 @@ getMatrix ts = foldl multStd (identity 3) (map mat ts)
 toSvgElem :: Shape -> Svg
 toSvgElem Empty  = circle ! r "0"
 toSvgElem Circle = circle ! r "1"
-toSvgElem Square = rect   ! width  "10" ! height "10"
+toSvgElem Square = rect   ! width  "1" ! height "1"
 
 
 toAttr :: Style -> Attribute
