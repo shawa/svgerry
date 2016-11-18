@@ -29,10 +29,10 @@ toSvgElem Empty  = circle ! r "0"
 toSvgElem Circle = circle ! r "1"
 toSvgElem Square = rect   ! width  "1" ! height "1"
 
-getHexS :: String -> String
-getHexS s = if (s =~ hexRe) then s else "#ff00ff"
-            where hexRe = "#[0-9A-Fa-f]{6}" :: String
 
+getHexS :: String -> String
+getHexS s = "#" ++ ( if (s =~ hexRe) then s else "ff00ff" )
+                     where hexRe = "[0-9A-Fa-f]{6}" :: String
 
 toAttr :: Style -> Attribute
 toAttr (StrokeWidth  w) = strokeWidth $ stringAttrVal w
