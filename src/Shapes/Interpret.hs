@@ -7,6 +7,8 @@ import Text.Blaze.Svg11
 import Text.Blaze.Svg11.Attributes hiding (multStd)
 import Text.Printf (printf)
 
+import Text.Regex.Posix ((=~))
+
 import Shapes.Lang
 import Shapes.Colours
 
@@ -27,17 +29,21 @@ toSvgElem Empty  = circle ! r "0"
 toSvgElem Circle = circle ! r "1"
 toSvgElem Square = rect   ! width  "1" ! height "1"
 
+getHexS :: String -> String
+getHexS s = if (s =~ hexRe) then s else "#ff00ff"
+            where hexRe = "#[0-9A-Fa-f]{6}" :: String
+
 
 toAttr :: Style -> Attribute
 toAttr (StrokeWidth  w) = strokeWidth $ stringAttrVal w
 
-toAttr (StrokeColour (RGBA r g b a)) = stroke $ stringValue$ printf "rgba(%d,%d,%d,%d)" r g b a
-toAttr (StrokeColour(Hex r g b)) = stroke $ stringValue $ printf "#%2x%2x%2x" r g b
-toAttr (StrokeColour c)              = stroke $ stringAttrVal c
+toAttr (StrokeColour (Hex s)) = stroke $ stringValue $ getHexS s
+toAttr (StrokeColour(RGBA r g b a)) = stroke $ stringValue $ printf "rgba(%d,%d,%d,%d)" r g b a
+toAttr (StrokeColour c)             = stroke $ stringAttrVal c
 
-toAttr (FillColour (Hex r g b)) = fill $ stringValue $ printf "#%2x%2x%2x" r g b
-toAttr (FillColour(RGBA r g b a)) = fill$ stringValue$ printf "rgba(%d,%d,%d,%d)" r g b a
-toAttr (FillColour c)            = fill $ stringAttrVal c
+toAttr (FillColour (Hex s))   = fill $ stringValue $ getHexS s
+toAttr (FillColour(RGBA r g b a)) = fill $ stringValue $ printf "rgba(%d,%d,%d,%d)" r g b a
+toAttr (FillColour c)             = fill $ stringAttrVal c
 
 stringAttrVal :: Show a => a -> AttributeValue
 stringAttrVal = stringValue . show
@@ -55,8 +61,4 @@ toSvg (styles, transforms, shape) = foldl (!) (toSvgElem shape) $ [toAttrs trans
 
 toSvgDoc :: [Figure] -> Svg
 toSvgDoc figs = svgHead $ foldl (>>) (toSvgElem Empty) (map toSvg figs)
-                where svgHead = docTypeSvg
-                                ! version "1.1"
-                                ! width "1200"
-                                ! height "550"
-                                ! viewbox "0 0 3 2"
+                where svgHead = docTypeSvg ! version "1.1" ! width "100%" ! height "100%" ! viewbox "-5 -5 10 10"
