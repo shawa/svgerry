@@ -58,9 +58,13 @@
 
             <form>
                 <div class="form-group"></div>
-                <textarea class="form-control" id="shapeText" rows="3" default="text">[([FillColour Mediumspringgreen, StrokeColour Salmon, StrokeWidth 0.1], [Translate 0 0], Circle)]</textarea> 
+                <textarea class="form-control" id="shapeText" rows="3" default="text">
+[([FillColour (Hex "f330ff"), StrokeColour Rebeccapurple, StrokeWidth 0.1], [Translate -3 -2, Scale 5 4, Rotate 45], Square),
+([FillColour Mediumspringgreen, StrokeColour (RGBA 1 1 1 0.5), StrokeWidth 0.5], [Translate 0 -1], Circle),
+([FillColour (RGBA 1 1 1 0.4), StrokeColour Cyan, StrokeWidth 0.1], [Translate -1 1, Scale 4 2], Circle)
+] </textarea>
                 <button type="button" "onclick="postShapeText()" id="shapeRenderButton" class="btn">render</button>
-                <span id="keyHint">ctrl|⌘ - enter</span>
+                <span id="keyHint">ctrl- enter</span>
             </form>
         </div>
 
@@ -82,6 +86,5 @@
     </script>
 
     </body>
-
 
 </html>

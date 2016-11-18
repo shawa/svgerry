@@ -38,11 +38,11 @@ toAttr :: Style -> Attribute
 toAttr (StrokeWidth  w) = strokeWidth $ stringAttrVal w
 
 toAttr (StrokeColour (Hex s)) = stroke $ stringValue $ getHexS s
-toAttr (StrokeColour(RGBA r g b a)) = stroke $ stringValue $ printf "rgba(%d,%d,%d,%d)" r g b a
+toAttr (StrokeColour(RGBA r g b a)) = stroke $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
 toAttr (StrokeColour c)             = stroke $ stringAttrVal c
 
 toAttr (FillColour (Hex s))   = fill $ stringValue $ getHexS s
-toAttr (FillColour(RGBA r g b a)) = fill $ stringValue $ printf "rgba(%d,%d,%d,%d)" r g b a
+toAttr (FillColour(RGBA r g b a)) = fill $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
 toAttr (FillColour c)             = fill $ stringAttrVal c
 
 stringAttrVal :: Show a => a -> AttributeValue
