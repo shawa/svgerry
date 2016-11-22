@@ -1,6 +1,8 @@
 module Shapes.Colours where
-data Colour = Aliceblue
-            | Antiquewhite
+data Colour = Hex String               -- e.g. "1a2b3c" -> #1a2b3c
+            | RGBA Int Int Int Double  -- R G B Alpha
+            | Aliceblue                -- What follows are _all_ of the built-in
+            | Antiquewhite             -- svg colour literals
             | Aqua
             | Aquamarine
             | Azure
@@ -146,6 +148,4 @@ data Colour = Aliceblue
             | Whitesmoke
             | Yellowgreen
             | Yellow
-            | Hex String
-            | RGBA Int Int Int Double
             deriving (Show, Read)

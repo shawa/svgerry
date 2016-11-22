@@ -4,9 +4,8 @@ module Shapes.Interpret where
 import Data.Matrix (Matrix, multStd, fromLists, toLists, identity)
 
 import Text.Blaze.Svg11
-import Text.Blaze.Svg11.Attributes hiding (multStd)
+import Text.Blaze.Svg11.Attributes
 import Text.Printf (printf)
-
 import Text.Regex.Posix ((=~))
 
 import Shapes.Lang
@@ -31,19 +30,19 @@ toSvgElem Square = rect   ! width  "1" ! height "1"
 
 
 getHexS :: String -> String
-getHexS s = "#" ++ ( if (s =~ hexRe) then s else "ff00ff" )
+getHexS s = "#" ++ ( if (s =~ hexRe) then s else "ff0000" )
                      where hexRe = "[0-9A-Fa-f]{6}" :: String
 
 toAttr :: Style -> Attribute
 toAttr (StrokeWidth  w) = strokeWidth $ stringAttrVal w
 
-toAttr (StrokeColour (Hex s)) = stroke $ stringValue $ getHexS s
-toAttr (StrokeColour(RGBA r g b a)) = stroke $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
-toAttr (StrokeColour c)             = stroke $ stringAttrVal c
+toAttr (StrokeColour (Hex s))         = stroke $ stringValue $ getHexS s
+toAttr (StrokeColour (RGBA r g b a))  = stroke $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
+toAttr (StrokeColour c)               = stroke $ stringAttrVal c
 
-toAttr (FillColour (Hex s))   = fill $ stringValue $ getHexS s
-toAttr (FillColour(RGBA r g b a)) = fill $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
-toAttr (FillColour c)             = fill $ stringAttrVal c
+toAttr (FillColour (Hex s))           = fill $ stringValue $ getHexS s
+toAttr (FillColour (RGBA r g b a))    = fill $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
+toAttr (FillColour c)                 = fill $ stringAttrVal c
 
 stringAttrVal :: Show a => a -> AttributeValue
 stringAttrVal = stringValue . show
@@ -54,14 +53,11 @@ stringAttrVal = stringValue . show
 toAttrs t = transform $ matrix a b c d e f
                         where [[a, c, e], [b, d, f], [0, 0, 1]] = toLists $ getMatrix t
                                                       -- nice sanity check
-
-
 toSvg :: Figure -> Svg
 toSvg (styles, transforms, shape) = foldl (!) (toSvgElem shape) $ [toAttrs transforms]
                                                                ++ map toAttr styles
                                                                ++ [customAttribute "vector-effect" "non-scaling-stroke"]
                                                                    -- fixes warped strokes due to transforms
-
 toSvgDoc :: [Figure] -> Svg
 toSvgDoc figs = svgHead $ foldl (>>) (toSvgElem Empty) (map toSvg figs)
                 where svgHead = docTypeSvg ! version "1.1" ! width "100%" ! height "100%" ! viewbox "-25 -25 50 50"
