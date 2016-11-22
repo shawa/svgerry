@@ -64,4 +64,4 @@ toSvg (styles, transforms, shape) = foldl (!) (toSvgElem shape) $ [toAttrs trans
 
 toSvgDoc :: [Figure] -> Svg
 toSvgDoc figs = svgHead $ foldl (>>) (toSvgElem Empty) (map toSvg figs)
-                where svgHead = docTypeSvg ! version "1.1" ! width "100%" ! height "100%" ! viewbox "-5 -5 10 10"
+                where svgHead = docTypeSvg ! version "1.1" ! width "100%" ! height "100%" ! viewbox "-25 -25 50 50"
