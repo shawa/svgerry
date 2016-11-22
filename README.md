@@ -23,4 +23,8 @@ The colour arguments for `FillColour`, `StrokeColour` can be specified as either
 ### Transforms
 The possible transforms are `Rotate <angle>`, `Scale <y> <x>` and `Translate <y> <x>`. Transforms are applied one after another, so their order is significant.
 
-For example, a 45 degree rotation followed by a translation by 5 units, will translate the shape along the _rotated coordinate space_. To minimize surprise, specify transforms in the order `Translate`, then `Rotate`, then `Scale`.
+For example, a 45 degree rotation followed by a translation by 5 units, will translate the shape along the _rotated coordinate space_. Adding a scale in the middle would scale the _coordinate space_ as well; the translation's effect is magnified by that scale.
+
+This can be used to introduce Skews for free, give it a go!
+
+To minimize surprise, specify transforms in the order `Translate`, then `Rotate`, then `Scale`.
