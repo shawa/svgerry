@@ -29,23 +29,26 @@ toSvgElem Circle = circle ! r "1"
 toSvgElem Square = rect   ! width  "1" ! height "1"
 
 
-getHexS :: String -> String
-getHexS s = "#" ++ ( if (s =~ hexRe) then s else "ff0000" )
-                     where hexRe = "[0-9A-Fa-f]{6}" :: String
+hexAttrVal :: String -> AttributeValue
+hexAttrVal s = stringValue $ "#" ++ ( if (s =~ hexRe) then s else "ff0000" )
+                          where hexRe = "[0-9A-Fa-f]{6}" :: String
+
+rgbAttrVal :: Int -> Int -> Int -> Double -> AttributeValue
+rgbAttrVal r g b a = stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
+
+unsafeRawAttrVal :: Show a => a -> AttributeValue
+unsafeRawAttrVal = stringValue . show
 
 toAttr :: Style -> Attribute
-toAttr (StrokeWidth  w) = strokeWidth $ stringAttrVal w
+toAttr (StrokeWidth  w) = strokeWidth $ unsafeRawAttrVal w
 
-toAttr (StrokeColour (Hex s))         = stroke $ stringValue $ getHexS s
-toAttr (StrokeColour (RGBA r g b a))  = stroke $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
-toAttr (StrokeColour c)               = stroke $ stringAttrVal c
+toAttr (FillColour   (Hex str))       = fill   $ hexAttrVal str
+toAttr (StrokeColour (Hex str))       = stroke $ hexAttrVal str
+toAttr (FillColour   (RGBA r g b a))  = fill   $ rgbAttrVal r g b a
+toAttr (StrokeColour (RGBA r g b a))  = stroke $ rgbAttrVal r g b a
+toAttr (FillColour c)                 = fill   $ unsafeRawAttrVal c
+toAttr (StrokeColour c)               = stroke $ unsafeRawAttrVal c
 
-toAttr (FillColour (Hex s))           = fill $ stringValue $ getHexS s
-toAttr (FillColour (RGBA r g b a))    = fill $ stringValue $ printf "rgba(%d,%d,%d,%f)" r g b a
-toAttr (FillColour c)                 = fill $ stringAttrVal c
-
-stringAttrVal :: Show a => a -> AttributeValue
-stringAttrVal = stringValue . show
 
 -- https://developer.mozilla.org/en/docs/Web/SVG/Attribute/transform
 -- We've had 3x3 matrices so far; in order to compose transformations easily
