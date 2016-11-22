@@ -53,18 +53,20 @@
             <div class="container">
                 <h1 id="logo">SVGerry</h1>
                 <h2 id="tagline">Andrew Shaw <span id="email">&lt;shawa1@tcd.ie&gt;</span></h2>
-                <iframe id="shapeSVGDrawing" width="100%" height="60%">
+                <iframe id="shapeSVGDrawing" width="100%" height="65%">
                 </iframe>
 
             <form>
                 <div class="form-group"></div>
                 <textarea class="form-control" id="shapeText" rows="3" default="text">
-[([FillColour (Hex "f330ff"), StrokeColour Rebeccapurple, StrokeWidth 10], [Translate -3 -2, Scale 5 4, Rotate 45], Square),
+[([FillColour (Hex "f330ff"), StrokeColour Rebeccapurple, StrokeWidth 10], [Translate -3 -2, Rotate 45, Scale 5 4], Square),
 ([FillColour Mediumspringgreen, StrokeColour (RGBA 1 1 1 1), StrokeWidth 2], [Translate 0 -1], Circle),
 ([FillColour (RGBA 1 1 1 0.4), StrokeColour Cyan, StrokeWidth 30], [Translate -1 1, Scale 4 2], Circle)
-] </textarea>
+]
+ </textarea>
                 <button type="button" "onclick="postShapeText()" id="shapeRenderButton" class="btn">render</button>
-                <span id="keyHint">ctrl- enter</span>
+                <span id="keyHint">ctrl-enter</span>
+                <span id="transHint">note: with transforms, order matters! Unless you know what you're doing, specify, Translate, then Rotate, then Scale.</span>
             </form>
         </div>
 
