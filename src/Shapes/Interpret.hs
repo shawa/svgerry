@@ -59,7 +59,7 @@ toAttrs t = transform $ matrix a b c d e f
 toSvg :: Figure -> Svg
 toSvg (styles, transforms, shape) = foldl (!) (toSvgElem shape) $ [toAttrs transforms]
                                                                ++ map toAttr styles
-                                                               ++ [customAttribute "vector-effct" "non-scaling-stroke"]
+                                                               ++ [customAttribute "vector-effect" "non-scaling-stroke"]
                                                                    -- fixes warped strokes due to transforms
 
 toSvgDoc :: [Figure] -> Svg
