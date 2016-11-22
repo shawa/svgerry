@@ -33,6 +33,7 @@ executable svgerry-exe
                      , blaze-html
                      , blaze-svg
                      , regex-posix
+                     , http-types
                      , text
   default-language:    Haskell2010
 
